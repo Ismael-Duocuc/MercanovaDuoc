@@ -59,3 +59,34 @@ CREATE DATABASE db_inventario;
 - Envíos consulta a Pedidos
 - Pago consulta a Pedidos y Descuentos
 - Inventario consulta a Productos
+
+## Despliegue Remoto
+- **API Gateway (Render):** https://mercanoval-gateway.onrender.com
+
+## Rutas principales del Gateway
+| Ruta | Microservicio |
+|---|---|
+| /api/clientes | Clientes (8081) |
+| /api/productos | Productos (8082) |
+| /api/categorias | Categorías (8083) |
+| /api/proveedores | Proveedores (8084) |
+| /api/descuentos | Descuentos (8085) |
+| /api/pedidos | Pedidos (8086) |
+| /api/envios | Envíos (8087) |
+| /api/carrito | Carrito (8088) |
+| /api/pagos | Pago (8089) |
+| /api/inventario | Inventario (8090) |
+
+## Documentación Swagger
+| Microservicio | URL |
+|---|---|
+| Clientes | http://localhost:8081/swagger-ui.html |
+| Productos | http://localhost:8082/swagger-ui.html |
+| Categorías | http://localhost:8083/swagger-ui.html |
+| Proveedores | http://localhost:8084/swagger-ui.html |
+| Descuentos | http://localhost:8085/swagger-ui.html |
+| Pedidos | http://localhost:8086/swagger-ui.html |
+| Envíos | http://localhost:8087/swagger-ui.html |
+| Carrito | http://localhost:8088/swagger-ui.html |
+| Pago | http://localhost:8089/swagger-ui.html |
+| Inventario | http://localhost:8090/swagger-ui.html |
