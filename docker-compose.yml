@@ -1,0 +1,131 @@
+version: '3.8'
+
+
+
+services:
+
+  clientes:
+    build: ./clientes
+    container_name: clientes_service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_clientes?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+
+  productos:
+    build: ./productos
+    container_name: productos_service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_productos?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+
+  categorias:
+    build: ./categorias
+    container_name: categorias_service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_categorias?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+
+  proveedores:
+    build: ./proveedores
+    container_name: proveedores_service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_proveedores?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+
+  descuentos:
+    build: ./descuentos
+    container_name: descuentos_service
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_descuentos?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${AIVEN_PASSWORD}"
+
+  pedidos:
+    build: ./pedidos
+    container_name: pedidos_service
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_pedidos?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+      # URLs de otros microservicios dentro de la red de Docker Compose
+      CLIENTES_URL: "http://clientes:8081"
+      PRODUCTOS_URL: "http://productos:8082"
+
+  envios:
+    build: ./envios
+    container_name: envios_service
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_envios?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+      PEDIDOS_URL: "http://pedidos:8086"
+
+  carrito:
+    build: ./carrito
+    container_name: carrito_service
+    ports:
+      - "8088:8088"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_carrito?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+      CLIENTES_URL: "http://clientes:8081"
+      PRODUCTOS_URL: "http://productos:8082"
+
+  pago:
+    build: ./pago
+    container_name: pago_service
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_pago?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${AIVEN_PASSWORD}"
+      PEDIDOS_URL: "http://pedidos:8086"
+      DESCUENTOS_URL: "http://descuentos:8085"
+
+  inventario:
+    build: ./inventario
+    container_name: inventario_service
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${AIVEN_HOST}:${AIVEN_PORT}/db_inventario?ssl-mode=REQUIRED"
+      SPRING_DATASOURCE_USERNAME: "${AIVEN_USER}"
+      SPRING_DATASOURCE_PASSWORD:  "${AIVEN_PASSWORD}"
+      PRODUCTOS_URL: "http://productos:8082"
+
+  gateway:
+    build: ./gateway
+    container_name: gateway_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - clientes
+      - productos
+      - categorias
+      - proveedores
+      - descuentos
+      - pedidos
+      - envios
+      - carrito
+      - pago
+      - inventario

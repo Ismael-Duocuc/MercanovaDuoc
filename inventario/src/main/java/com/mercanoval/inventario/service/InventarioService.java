@@ -6,6 +6,7 @@ import com.mercanoval.inventario.repository.InventarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,6 +20,9 @@ public class InventarioService {
     private static final Logger logger = LoggerFactory.getLogger(InventarioService.class);
     private final InventarioRepository inventarioRepository;
     private final WebClient webClient;
+
+    @Value("${servicios.productos.url}")
+    private String productosUrl;
 
     // Obtener todos los inventarios
     public List<Inventario> obtenerTodos() {
@@ -50,7 +54,7 @@ public class InventarioService {
 
         // Verificar que el producto existe
         Boolean productoExiste = webClient.get()
-                .uri("http://localhost:8082/api/productos/" + dto.getProductoId())
+                .uri(productosUrl + "/api/productos/" + dto.getProductoId())
                 .retrieve()
                 .toBodilessEntity()
                 .map(response -> response.getStatusCode().is2xxSuccessful())

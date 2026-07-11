@@ -6,6 +6,7 @@ import com.mercanoval.carrito.repository.CarritoRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,6 +20,12 @@ public class CarritoService {
     private static final Logger logger = LoggerFactory.getLogger(CarritoService.class);
     private final CarritoRepository carritoRepository;
     private final WebClient webClient;
+
+    @Value("${servicios.clientes.url}")
+    private String clientesUrl;
+
+    @Value("${servicios.productos.url}")
+    private String productosUrl;
 
     // Obtener todos los items del carrito
     public List<Carrito> obtenerTodos() {
@@ -44,7 +51,7 @@ public class CarritoService {
 
         // Verificar que el cliente existe
         Boolean clienteExiste = webClient.get()
-                .uri("http://localhost:8081/api/clientes/" + dto.getClienteId())
+                .uri(clientesUrl + "/api/clientes/" + dto.getClienteId())
                 .retrieve()
                 .toBodilessEntity()
                 .map(response -> response.getStatusCode().is2xxSuccessful())
@@ -60,7 +67,7 @@ public class CarritoService {
 
         // Verificar que el producto existe
         Boolean productoExiste = webClient.get()
-                .uri("http://localhost:8082/api/productos/" + dto.getProductoId())
+                .uri(productosUrl + "/api/productos/" + dto.getProductoId())
                 .retrieve()
                 .toBodilessEntity()
                 .map(response -> response.getStatusCode().is2xxSuccessful())

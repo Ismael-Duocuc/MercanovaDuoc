@@ -6,6 +6,7 @@ import com.mercanoval.pago.repository.PagoRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,6 +20,12 @@ public class PagoService {
     private static final Logger logger = LoggerFactory.getLogger(PagoService.class);
     private final PagoRepository pagoRepository;
     private final WebClient webClient;
+
+    @Value("${servicios.pedidos.url}")
+    private String pedidosUrl;
+
+    @Value("${servicios.descuentos.url}")
+    private String descuentosUrl;
 
     // Obtener todos los pagos
     public List<Pago> obtenerTodos() {
@@ -50,7 +57,7 @@ public class PagoService {
 
         // Verificar que el pedido existe
         Boolean pedidoExiste = webClient.get()
-                .uri("http://localhost:8086/api/pedidos/" + dto.getPedidoId())
+                .uri(pedidosUrl + "/api/pedidos/" + dto.getPedidoId())
                 .retrieve()
                 .toBodilessEntity()
                 .map(response -> response.getStatusCode().is2xxSuccessful())
@@ -76,7 +83,7 @@ public class PagoService {
             try {
                 // Obtener descuento
                 java.util.Map descuento = webClient.get()
-                        .uri("http://localhost:8085/api/descuentos/codigo/" + dto.getCodigoDescuento())
+                        .uri(descuentosUrl + "/api/descuentos/codigo/" + dto.getCodigoDescuento())
                         .retrieve()
                         .bodyToMono(java.util.Map.class)
                         .block();

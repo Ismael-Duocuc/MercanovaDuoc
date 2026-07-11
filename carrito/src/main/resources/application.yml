@@ -16,3 +16,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+
+servicios:
+  clientes:
+    url: ${CLIENTES_URL:http://localhost:8081}
+  productos:
+    url: ${PRODUCTOS_URL:http://localhost:8082}
